@@ -1,1 +1,0 @@
-window.HUARUI_FEATURED = [];

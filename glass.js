@@ -21,6 +21,74 @@
 // Motion decorates the controls; content and keyboard actions work without it.
 const motionQuery=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
+let heroSelected=0;
+const heroButtons=[...document.querySelectorAll('[data-hero]')];
+const heroVisual=document.querySelector('.hero-visual');
+const heroTrack=document.getElementById('hero-carousel-track');
+const heroTools=[...heroTrack.querySelectorAll('.carousel-tool')];
+const heroStatus=heroVisual.querySelector('.hero-carousel-status');
+const wrapHero=index=>(index+products.length)%products.length;
+// Load the other product photos before they are first brought into view.
+const heroPhotos=products.map(product=>{const image=new Image();image.src='assets/'+product.image;return image;});
+
+function changeHero(index){
+  if(index===heroSelected)return;
+  const delta=wrapHero(index-heroSelected);
+  const direction=delta<=products.length/2?1:-1;
+  const adjacent=delta===1||delta===products.length-1;
+  const slots=['left','center','right'];
+  const targets=[wrapHero(index-1),index,wrapHero(index+1)];
+  const previous=new Map(heroTools.map(tool=>{
+    const box=tool.getBoundingClientRect();
+    return [+tool.dataset.index,{tool,x:box.left+box.width/2,scale:box.width/tool.offsetWidth,opacity:+getComputedStyle(tool).opacity}];
+  }));
+  const available=heroTools.filter(tool=>!targets.includes(+tool.dataset.index));
+  heroTools.forEach(tool=>tool.getAnimations().forEach(animation=>animation.cancel()));
+  const offset=Math.min(heroTrack.clientWidth*.075,60)*direction;
+  const layout=targets.map((target,i)=>{
+    const old=previous.get(target),tool=old?.tool||available.shift(),slot=slots[i];
+    if(!old){
+      const image=tool.querySelector('img');
+      image.src=heroPhotos[target].src;
+      image.alt=products[target].name+'实拍';
+      tool.dataset.index=target;
+    }
+    tool.dataset.slot=slot;
+    return {tool,old,slot};
+  });
+  if(!motionQuery.matches)layout.forEach(({tool,old,slot})=>{
+    const box=tool.getBoundingClientRect();
+    const main=slot==='center';
+    const scale=main?1:.73,opacity=main?1:.58;
+    const x=adjacent&&old?old.x-(box.left+box.width/2):offset;
+    const fromScale=adjacent&&old?old.scale:scale*.96;
+    const fromOpacity=adjacent&&old?old.opacity:opacity*.76;
+    tool.animate([
+      {transform:`translate(${x}px,0) translate(-50%,-50%) scale(${fromScale})`,opacity:fromOpacity},
+      {transform:`translate(-50%,-50%) scale(${scale})`,opacity}
+    ],{duration:adjacent?510:370,easing:'cubic-bezier(.22,1,.36,1)'});
+  });
+  heroSelected=index;
+  heroButtons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
+  heroStatus.textContent='当前展示：'+products[index].name;
+  document.dispatchEvent(new CustomEvent('hero:change',{detail:{index}}));
+}
+
+heroVisual.querySelector('.hero-arrow-prev').addEventListener('click',()=>changeHero(wrapHero(heroSelected-1)));
+heroVisual.querySelector('.hero-arrow-next').addEventListener('click',()=>changeHero(wrapHero(heroSelected+1)));
+function heroKey(event,from){
+  if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+  event.preventDefault();
+  const index=event.key==='Home'?0:event.key==='End'?products.length-1:wrapHero(from+(event.key==='ArrowRight'?1:-1));
+  changeHero(index);
+  if(event.currentTarget.matches('[data-hero]'))heroButtons[index].focus({preventScroll:true});
+}
+heroVisual.addEventListener('keydown',event=>heroKey(event,heroSelected));
+heroButtons.forEach((button,index)=>{
+  button.addEventListener('click',()=>changeHero(index));
+  button.addEventListener('keydown',event=>heroKey(event,index));
+});
+
 document.querySelectorAll('.product-card').forEach(card=>card.addEventListener('pointermove',event=>{if(!finePointer.matches||motionQuery.matches)return;const r=card.getBoundingClientRect();card.style.setProperty('--light-x',event.clientX-r.left+'px');card.style.setProperty('--light-y',event.clientY-r.top+'px');}));
 let scrollScheduled=false;
 function updateScroll(){scrollScheduled=false;const max=document.documentElement.scrollHeight-innerHeight;document.querySelector('.reading-progress').style.transform='scaleX('+(max>0?Math.min(scrollY/max,1):0)+')';document.querySelector('.header').classList.toggle('is-scrolled',scrollY>35);if(scrollY<innerHeight*.55)document.querySelectorAll('.main-navigation .nav-link').forEach(a=>a.classList.toggle('active',a.hash==='#top'));}
