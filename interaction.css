@@ -1,0 +1,114 @@
+/* Apply the same pointer, selection and caret policy to every surface,
+   including native dialogs and content rendered after the page loads. */
+html,
+body {
+  cursor: default;
+}
+
+html,
+body,
+body * {
+  caret-color: transparent;
+}
+
+body,
+body * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+a[href],
+button:not(:disabled),
+summary,
+input[type="range"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+[role="button"] {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+body input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="color"]):not([type="file"]):not([type="hidden"]),
+body textarea,
+body [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+  caret-color: currentColor;
+}
+
+body input[readonly],
+body textarea[readonly],
+body input:disabled,
+body textarea:disabled {
+  cursor: default;
+  caret-color: transparent;
+}
+
+img,
+svg {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button *,
+a[href] *,
+summary *,
+[role="button"] * {
+  cursor: inherit;
+}
+
+button svg,
+a[href] svg {
+  pointer-events: none;
+}
+
+dialog::backdrop {
+  cursor: default;
+  caret-color: transparent;
+}
+
+.dialog-close {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.dialog-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Keep modal hit targets stationary, including immediately after opening. */
+dialog[open] {
+  animation: interaction-dialog-in .18s ease-out;
+}
+
+.dialog-close:hover {
+  transform: none;
+}
+
+@keyframes interaction-dialog-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tool-workbench .wb-number-line input {
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, background .2s;
+}
+
+.tool-workbench .wb-number-line input:hover {
+  border-bottom-color: #d6e1ed;
+}
+
+.tool-workbench .wb-number-line input:focus {
+  border-bottom-color: #0071e3;
+  background: #f3f8fe;
+}

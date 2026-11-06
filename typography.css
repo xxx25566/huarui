@@ -1,0 +1,270 @@
+/* One typography scale for the page, controls, and dynamically opened dialogs. */
+:root {
+  --tracking-copy: .035em;
+  --tracking-display: .065em;
+  --tracking-heading: .055em;
+  --tracking-subheading: .045em;
+  --tracking-control: .055em;
+  --tracking-caption: .045em;
+}
+
+body {
+  letter-spacing: var(--tracking-copy);
+}
+
+button,
+input,
+textarea,
+select {
+  letter-spacing: var(--tracking-control);
+}
+
+h1,
+.hero-copy h1 {
+  letter-spacing: var(--tracking-display);
+}
+
+h2,
+.section-heading h2,
+.precision-top h2,
+.closing h2,
+.dialog-copy h2,
+.wb-section-heading h2,
+.wb-inquiry-head h2 {
+  letter-spacing: var(--tracking-heading);
+}
+
+h3,
+h4,
+.spotlight-copy h3,
+.card-bottom h3,
+.recommend-item h3,
+.wb-panel-heading h3,
+.wb-recommend-copy h4,
+.wb-inquiry-item h3 {
+  letter-spacing: var(--tracking-subheading);
+}
+
+.header .main-navigation .nav-link,
+.header .main-navigation .mega-links a,
+.nav-language,
+.hero-dock button,
+.filter,
+.spotlight-tabs button,
+.button,
+.text-link,
+.wb-link,
+.wb-primary,
+.wb-secondary,
+.wb-inquiry-trigger {
+  letter-spacing: var(--tracking-control);
+}
+
+.hero-copy > p,
+.section-heading > p,
+.precision-top > p,
+.spotlight-copy p,
+.spotlight-copy dl,
+.dialog-copy > p,
+.dialog-copy li,
+.dialog-note,
+.collection-note,
+.wb-intro,
+.wb-recommend-copy > p:not(.wb-recommend-label),
+.wb-inquiry-item-copy p,
+.wb-inquiry-note {
+  letter-spacing: var(--tracking-copy);
+}
+
+.wb-eyebrow {
+  letter-spacing: .08em;
+}
+
+.wb-choice strong,
+.wb-choice small,
+.wb-group-heading,
+.wb-preset-grid > button strong,
+.wb-preset-grid > button small,
+.wb-field-heading,
+.wb-match-specs,
+.wb-result-heading,
+.wb-results-grid p,
+.wb-result-footer,
+.wb-method,
+.wb-inquiry-form label,
+.wb-inquiry-head > div > p:last-child,
+.wb-feedback,
+.wb-footnote,
+.card-top {
+  letter-spacing: var(--tracking-caption);
+}
+
+.eyebrow,
+.hero-copy > .eyebrow,
+.section-heading .eyebrow,
+.precision-top .eyebrow,
+.wb-kicker,
+.image-caption,
+.visual-label {
+  letter-spacing: .2em;
+}
+
+.card-bottom small,
+.product-en,
+.dialog-copy > small,
+.recommend-item small {
+  letter-spacing: .1em;
+}
+
+.wb-number-line input,
+.wb-result-value strong,
+.wb-ticks button,
+.wb-inquiry-item-copy small,
+.wb-inquiry-item-copy > span {
+  letter-spacing: .01em;
+}
+
+.footer-brand {
+  letter-spacing: .14em;
+}
+
+.footer-brand span {
+  letter-spacing: .2em;
+}
+
+.closing-word {
+  letter-spacing: .035em;
+}
+
+.tiny-cross,
+.crosshair,
+.card-open,
+.specimen-symbol,
+.tag-plus {
+  letter-spacing: 0;
+}
+
+/* Readable type scale for the smaller content in the desktop design. */
+:root {
+  --size-caption: .8125rem;
+  --size-label: .875rem;
+  --size-control: .9375rem;
+  --size-copy: 1rem;
+}
+
+.hero-copy > .eyebrow, .section-heading .eyebrow,
+.precision-top .eyebrow, .closing .eyebrow,
+.image-caption, .visual-caption small, .dock-label small {
+  font-size: var(--size-caption);
+}
+
+.header .main-navigation .nav-link,
+.header .main-navigation .mega-links a,
+.filter, .button, .text-link, .spotlight-tabs button {
+  font-size: var(--size-control);
+}
+
+.nav-language, .hero-meta, .scroll-cue, .hero-dock .dock-label,
+.collection-count, .collection-note, .visual-caption div,
+footer, .dialog-note {
+  font-size: var(--size-label);
+}
+
+.section-heading > p, .precision-top > p,
+.spotlight-copy p, .dialog-copy > p {
+  font-size: var(--size-copy);
+}
+
+.collection-count, .collection-note, .section-heading > p {
+  color: #49647f;
+}
+
+.card-top > span:first-child {
+  font-size: var(--size-caption);
+  opacity: 1;
+  color: #365b83;
+}
+
+.card-bottom {
+  text-align: left;
+  padding-right: 42px;
+}
+
+.card-bottom small {
+  font-size: .75rem;
+  letter-spacing: .065em;
+  color: #4c6782;
+  white-space: normal;
+  min-height: 3em;
+}
+
+.card-bottom h3 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  margin-bottom: 0;
+}
+
+.product-en, .dialog-copy > small { font-size: var(--size-caption); }
+.spotlight-copy dl > div, .dialog-copy li, .zoom-button, .dialog-zoom {
+  font-size: var(--size-label);
+}
+
+.wb-kicker, .wb-small-label, .wb-live, .wb-group-heading > span,
+.wb-choice small, .wb-feature-grid .wb-choice small,
+.wb-recommend-label, .wb-match-specs dt, .wb-match-specs dd small,
+.wb-preset-grid > button small, .wb-field-heading > span,
+.wb-number-line > span, .wb-ticks button, .wb-parameter-message,
+.wb-icon-link, .wb-results-grid p > span, .wb-result-value > span,
+.wb-result-footer > span, .wb-method, .wb-method p, .wb-footnote,
+.wb-footnote > span, .wb-inquiry-form label > span,
+.wb-inquiry-item small, .wb-inquiry-item-copy > span, .wb-inquiry-note {
+  font-size: var(--size-caption);
+}
+
+.wb-choice small, .wb-feature-grid .wb-choice small, .wb-small-label,
+.wb-live, .wb-group-heading > span, .wb-preset-grid > button small,
+.wb-preset-grid > button[aria-pressed=true] small,
+.wb-match-specs dt, .wb-match-specs dd small, .wb-field-heading > span,
+.wb-number-line > span, .wb-ticks button, .wb-result-value > span,
+.wb-result-footer > span, .wb-footnote, .wb-inquiry-note {
+  color: #5f6876;
+}
+
+.wb-group-heading h4, .wb-choice strong, .wb-feature-grid .wb-choice strong,
+.wb-match-specs dd, .wb-preset-grid > button strong, .wb-field-heading label,
+.wb-results-grid p, .wb-result-heading, .wb-inquiry-form label,
+.wb-inquiry-head > div > p:last-child, .wb-inquiry-item p, .wb-inquiry-empty p {
+  font-size: var(--size-label);
+}
+
+.wb-intro, .wb-inquiry-form input, .wb-inquiry-form textarea {
+  font-size: var(--size-copy);
+}
+
+.wb-recommend-copy > p:not(.wb-recommend-label), .wb-feedback,
+.wb-inquiry-trigger, .wb-link, .wb-result-footer .wb-link,
+.wb-footnote .wb-link, .wb-reset, .wb-match-actions .wb-primary,
+.wb-match-actions .wb-secondary, .wb-inquiry-footer .wb-primary,
+.wb-inquiry-footer .wb-secondary {
+  font-size: var(--size-label);
+}
+
+.wb-choice { padding-right: 22px; }
+.wb-choice strong, .wb-feature-grid .wb-choice strong,
+.wb-preset-grid > button strong, .wb-preset-grid > button small {
+  white-space: normal;
+}
+.wb-match-actions, .wb-result-footer { flex-wrap: wrap; }
+.wb-result-footer > span { max-width: none; }
+.wb-recommend-copy > p:not(.wb-recommend-label), .wb-method p, .dialog-note {
+  line-height: 1.8;
+}
+
+@media (max-width: 1100px) {
+  .card-bottom h3 { font-size: 1rem; }
+  .wb-material-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 780px) {
+  .wb-inquiry-trigger { font-size: 0; }
+}
