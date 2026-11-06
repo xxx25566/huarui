@@ -60,15 +60,15 @@
   section.innerHTML = `
     <div class="wb-shell">
       <div class="wb-section-heading">
-        <div><p class="wb-eyebrow">桦锐 · 智能选型工作台</p><h2>选对刀具。<br><span>让切削，更有把握。</span></h2><p class="wb-intro">从工件材料到加工形态，找到选型方向。<br>把一组参数，变成清晰的转速与进给。</p></div>
+        <h2>选型与切削参数</h2>
         <button type="button" class="wb-inquiry-trigger" data-wb-action="inquiry">${icon('bag')}我的询价单<span id="wb-inquiry-count">0</span></button>
       </div>
       <div class="wb-grid">
         <article class="wb-panel wb-selector" aria-labelledby="wb-selector-title">
-          <div class="wb-panel-heading"><div><p class="wb-kicker">TOOL SELECTOR</p><h3 id="wb-selector-title">找到适合的刀型。</h3></div><span class="wb-small-label">工况匹配</span></div>
-          <div class="wb-group-heading"><h4>工件材料</h4><span>选择需要加工的材质</span></div>
+          <div class="wb-panel-heading"><h3 id="wb-selector-title">刀具选型</h3></div>
+          <div class="wb-group-heading"><h4>工件材料</h4></div>
           <div class="wb-material-grid" role="group" aria-label="选择工件材料">${materials.map((m, i) => `<button type="button" class="wb-choice" data-wb-material="${i}" aria-pressed="${i === 0}"><span class="wb-choice-check">${icon('check')}</span><strong>${m.title}</strong><small>${m.sub}</small></button>`).join('')}</div>
-          <div class="wb-group-heading wb-feature-heading"><h4>加工形态</h4><span>选择主要工序</span></div>
+          <div class="wb-group-heading wb-feature-heading"><h4>加工形态</h4></div>
           <div class="wb-feature-grid" role="group" aria-label="选择加工形态">${features.map((f, i) => `<button type="button" class="wb-choice" data-wb-feature="${i}" aria-pressed="${i === 0}"><span class="wb-choice-check">${icon('check')}</span><strong>${f.title}</strong><small>${f.sub}</small></button>`).join('')}</div>
           <div class="wb-recommendation">
             <div class="wb-recommend-main"><div class="wb-tool-photo"><img id="wb-match-image" src="assets/55.png" alt="3刃锥度铣刀"></div><div class="wb-recommend-copy"><p class="wb-recommend-label">建议关注</p><h4 id="wb-match-title"></h4><p id="wb-match-desc"></p><button type="button" class="wb-link" data-wb-action="match-product">近看刀具细节 ${icon('arrow')}</button></div></div>
@@ -77,7 +77,7 @@
           </div>
         </article>
         <article class="wb-panel wb-calculator" aria-labelledby="wb-calculator-title">
-          <div class="wb-panel-heading"><div><p class="wb-kicker">SPEED & FEED</p><h3 id="wb-calculator-title">把参数，算明白。</h3></div><span class="wb-live"><i></i>实时计算</span></div>
+          <div class="wb-panel-heading"><h3 id="wb-calculator-title">参数计算</h3></div>
           <div class="wb-group-heading"><h4>快速预设</h4><button type="button" class="wb-reset" data-wb-action="reset">重置参数</button></div>
           <div class="wb-preset-grid" role="group" aria-label="选择参数预设">${presets.map(p => `<button type="button" data-wb-preset="${p.id}" aria-pressed="${p.id === state.preset}"><strong>${p.name}</strong><small>${p.sub}</small></button>`).join('')}</div>
           <div class="wb-fields">${fields.map(f => `<div class="wb-field"><div class="wb-field-heading"><label for="wb-number-${f.key}">${f.label}</label><span>${f.symbol}</span></div><div class="wb-number-line"><input type="number" id="wb-number-${f.key}" data-wb-number="${f.key}" min="${f.min}" max="${f.max}" step="${f.step}" value="${f.format(state.calc[f.key])}" inputmode="decimal" aria-describedby="wb-parameter-message"><span>${f.unit}</span></div><input type="range" data-wb-range="${f.key}" aria-label="拖动调整${f.label}" min="${f.min}" max="${f.max}" step="${f.step}" value="${state.calc[f.key]}"><div class="wb-ticks">${f.ticks.map(n => `<button type="button" data-wb-tick="${f.key}" data-value="${n}" aria-label="${f.label}设为${n}${f.unit}">${tickLabel(f, n)}</button>`).join('')}</div></div>`).join('')}</div>
@@ -86,7 +86,7 @@
           <details class="wb-method"><summary>计算方式与参数说明 <span>+</span></summary><div><p><b>S = 1000 × Vc ÷ (π × D)</b><br><b>F = S × Z × fz</b></p><p>D 为实际接触处的有效切削直径；Z 为有效切削刃数。球刀与交错齿刀具请按实际工况填写。进给量使用未取整的转速计算，结果取整显示。</p></div></details>
         </article>
       </div>
-      <div class="wb-footnote"><span>让参考，更贴近实际。</span><p>预设与推荐参数为选型起点，请结合工件硬度、刀具规格、悬伸与设备上限调整后试切。</p><button type="button" class="wb-link" data-wb-action="custom">整理非标定制需求 ${icon('arrow')}</button></div>
+      <div class="wb-footnote"><p>预设与推荐参数为选型起点，请结合工件硬度、刀具规格、悬伸与设备上限调整后试切。</p><button type="button" class="wb-link" data-wb-action="custom">整理非标定制需求 ${icon('arrow')}</button></div>
     </div>`;
   const inquiryDialog = document.createElement('dialog');
   inquiryDialog.className = 'wb-inquiry-dialog';
