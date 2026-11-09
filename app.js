@@ -9,8 +9,18 @@ let selected=0;
 const collection=document.getElementById('collection');
 collection.innerHTML=`<div class="collection-toolbar"><div class="filters" role="group" aria-label="按加工类型筛选"><button class="filter active" data-filter="all" aria-pressed="true">全部系列</button><button class="filter" data-filter="milling" aria-pressed="false">铣削加工</button><button class="filter" data-filter="shaping" aria-pressed="false">成型加工</button><button class="filter" data-filter="finishing" aria-pressed="false">倒角修边</button></div></div><div class="product-grid">${products.map((p,i)=>`<button id="product-card-${i}" class="product-card" data-product="${i}" data-group="${p.group}" aria-label="查看${p.name}详情"><div class="card-photo"><img src="assets/${p.image}" alt="${p.name}" loading="lazy"></div><div class="card-bottom"><h3>${p.name}</h3><span class="card-open" aria-hidden="true">+</span></div></button>`).join('')}</div>`;
 document.getElementById('lower-content').innerHTML=`<section class="precision-section" id="precision"><div class="precision-top"><h2>刀具细节</h2></div><div class="spotlight"><div class="spotlight-image"><div class="spec-line spec-left"></div><img id="spotlight-photo" src="assets/44.png" alt="4刃钨钢铣刀"><div class="spec-line spec-right"></div>
-<div class="spotlight-player" role="group" aria-label="刀具视频" hidden>
+<div class="video-player spotlight-player" role="group" aria-label="刀具视频" hidden>
   <video class="spotlight-video" playsinline preload="metadata" disablepictureinpicture></video>
+</div></div><div class="spotlight-copy"><div class="spotlight-tabs" role="group" aria-label="选择刀具">${products.map((p,i)=>`<button data-select="${i}" class="${i===0?'active':''}" aria-pressed="${i===0}" aria-label="查看${p.name}">${p.name.replace(/^[0-9]+刃/, '')}</button>`).join('')}</div><div id="spotlight-details" aria-live="polite"></div><button class="button light" id="detail-button">查看刀具详情 <span class="tiny-cross">+</span></button></div></div></section>
+<section id="selection"></section>`;
+// Unless a different cover is requested, use the first frame of the source clip.
+const spotlightPanel = document.querySelector('.spotlight-image');
+const spotlightPhoto = document.getElementById('spotlight-photo');
+const spotlightPlayer = spotlightPanel.querySelector('.spotlight-player');
+const spotlightVideo = spotlightPlayer.querySelector('video');
+function setupVideoPlayer(player) {
+  const video = player.querySelector('video');
+  player.insertAdjacentHTML('beforeend', `
   <button class="player-surface" type="button" aria-label="播放视频">
     <span class="player-center-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l12-7z"/></svg></span>
   </button>
@@ -22,86 +32,86 @@ document.getElementById('lower-content').innerHTML=`<section class="precision-se
     </div>
     <input class="player-seek" type="range" min="0" max="1000" value="0" aria-label="播放进度" disabled>
   </div>
-</div></div><div class="spotlight-copy"><div class="spotlight-tabs" role="group" aria-label="选择刀具">${products.map((p,i)=>`<button data-select="${i}" class="${i===0?'active':''}" aria-pressed="${i===0}" aria-label="查看${p.name}">${p.name.replace(/^[0-9]+刃/, '')}</button>`).join('')}</div><div id="spotlight-details" aria-live="polite"></div><button class="button light" id="detail-button">查看刀具详情 <span class="tiny-cross">+</span></button></div></div></section>
-<section id="selection"></section>`;
-// Unless a different cover is requested, use the first frame of the source clip.
-const spotlightPanel = document.querySelector('.spotlight-image');
-const spotlightPhoto = document.getElementById('spotlight-photo');
-const spotlightPlayer = spotlightPanel.querySelector('.spotlight-player');
-const spotlightVideo = spotlightPlayer.querySelector('video');
-const playerSurface = spotlightPlayer.querySelector('.player-surface');
-const playerToggle = spotlightPlayer.querySelector('.player-toggle');
-const playerMute = spotlightPlayer.querySelector('.player-mute');
-const playerFullscreen = spotlightPlayer.querySelector('.player-fullscreen');
-const playerSeek = spotlightPlayer.querySelector('.player-seek');
-let playerControlsTimer;
+  `);
+  const playerSurface = player.querySelector('.player-surface');
+  const playerToggle = player.querySelector('.player-toggle');
+  const playerMute = player.querySelector('.player-mute');
+  const playerFullscreen = player.querySelector('.player-fullscreen');
+  const playerSeek = player.querySelector('.player-seek');
+  let playerControlsTimer;
 
-function updatePlayerControls() {
-  const playing = !spotlightVideo.paused && !spotlightVideo.ended;
-  const playLabel = playing ? '暂停视频' : '播放视频';
-  const muted = spotlightVideo.muted;
-  const duration = spotlightVideo.duration;
-  const canSeek = Number.isFinite(duration) && duration > 0;
-  const progress = canSeek ? spotlightVideo.currentTime / duration : 0;
-  spotlightPlayer.classList.toggle('is-playing', playing);
-  spotlightPlayer.classList.toggle('is-muted', muted);
-  playerSurface.setAttribute('aria-label', playLabel);
-  playerToggle.setAttribute('aria-label', playLabel);
-  playerMute.setAttribute('aria-label', muted ? '取消静音' : '静音');
-  playerSeek.disabled = !canSeek;
-  playerSeek.value = Math.round(progress * 1000);
-  playerSeek.style.setProperty('--progress', `${progress * 100}%`);
-}
-
-function togglePlayerPlayback() {
-  if (spotlightVideo.paused || spotlightVideo.ended) {
-    spotlightVideo.play().catch(() => updatePlayerControls());
-  } else {
-    spotlightVideo.pause();
+  function updatePlayerControls() {
+    const playing = !video.paused && !video.ended;
+    const playLabel = playing ? '暂停视频' : '播放视频';
+    const muted = video.muted;
+    const duration = video.duration;
+    const canSeek = Number.isFinite(duration) && duration > 0;
+    const progress = canSeek ? video.currentTime / duration : 0;
+    player.classList.toggle('is-playing', playing);
+    player.classList.toggle('is-muted', muted);
+    playerSurface.setAttribute('aria-label', playLabel);
+    playerToggle.setAttribute('aria-label', playLabel);
+    playerMute.setAttribute('aria-label', muted ? '取消静音' : '静音');
+    playerSeek.disabled = !canSeek;
+    playerSeek.value = Math.round(progress * 1000);
+    playerSeek.style.setProperty('--progress', `${progress * 100}%`);
   }
+
+  function togglePlayerPlayback() {
+    if (video.paused || video.ended) {
+      video.play().catch(() => updatePlayerControls());
+    } else {
+      video.pause();
+    }
+  }
+
+  playerSurface.addEventListener('click', togglePlayerPlayback);
+  playerToggle.addEventListener('click', togglePlayerPlayback);
+  playerMute.addEventListener('click', () => { video.muted = !video.muted; });
+  playerSeek.addEventListener('input', () => {
+    video.currentTime = video.duration * Number(playerSeek.value) / 1000;
+    updatePlayerControls();
+  });
+  for (const event of ['play', 'pause', 'ended', 'timeupdate', 'durationchange', 'volumechange', 'emptied']) {
+    video.addEventListener(event, updatePlayerControls);
+  }
+
+  playerFullscreen.hidden = !document.fullscreenEnabled;
+  playerFullscreen.addEventListener('click', () => {
+    const action = document.fullscreenElement === player
+      ? document.exitFullscreen() : player.requestFullscreen();
+    action.catch(() => {});
+  });
+  document.addEventListener('fullscreenchange', () => {
+    const label = document.fullscreenElement === player ? '退出全屏' : '全屏';
+    playerFullscreen.setAttribute('aria-label', label);
+  });
+
+  player.addEventListener('pointerdown', event => {
+    if (event.pointerType === 'mouse') return;
+    player.classList.add('show-controls');
+    clearTimeout(playerControlsTimer);
+  });
+  player.addEventListener('pointerup', event => {
+    if (event.pointerType === 'mouse') return;
+    playerControlsTimer = setTimeout(() => player.classList.remove('show-controls'), 3000);
+  });
+  player.addEventListener('pointercancel', () => player.classList.remove('show-controls'));
+
+  video.addEventListener('play', () => {
+    for (const other of document.querySelectorAll('.video-player > video')) {
+      if (other !== video && !other.paused) other.pause();
+    }
+  });
 }
 
-playerSurface.addEventListener('click', togglePlayerPlayback);
-playerToggle.addEventListener('click', togglePlayerPlayback);
-playerMute.addEventListener('click', () => { spotlightVideo.muted = !spotlightVideo.muted; });
-playerSeek.addEventListener('input', () => {
-  spotlightVideo.currentTime = spotlightVideo.duration * Number(playerSeek.value) / 1000;
-  updatePlayerControls();
-});
-for (const event of ['play', 'pause', 'ended', 'timeupdate', 'durationchange', 'volumechange', 'emptied']) {
-  spotlightVideo.addEventListener(event, updatePlayerControls);
-}
-
-playerFullscreen.hidden = !document.fullscreenEnabled;
-playerFullscreen.addEventListener('click', () => {
-  const action = document.fullscreenElement === spotlightPlayer
-    ? document.exitFullscreen() : spotlightPlayer.requestFullscreen();
-  action.catch(() => {});
-});
-document.addEventListener('fullscreenchange', () => {
-  const label = document.fullscreenElement === spotlightPlayer ? '退出全屏' : '全屏';
-  playerFullscreen.setAttribute('aria-label', label);
-});
-
-spotlightPlayer.addEventListener('pointerdown', event => {
-  if (event.pointerType === 'mouse') return;
-  spotlightPlayer.classList.add('show-controls');
-  clearTimeout(playerControlsTimer);
-});
-spotlightPlayer.addEventListener('pointerup', event => {
-  if (event.pointerType === 'mouse') return;
-  playerControlsTimer = setTimeout(() => spotlightPlayer.classList.remove('show-controls'), 3000);
-});
-spotlightPlayer.addEventListener('pointercancel', () => spotlightPlayer.classList.remove('show-controls'));
+document.querySelectorAll('.video-player').forEach(setupVideoPlayer);
 
 function showSpotlightVideo(show) {
   spotlightPanel.classList.toggle('has-video', show);
   spotlightPhoto.hidden = show;
   spotlightPlayer.hidden = !show;
-  if (!show) {
-    clearTimeout(playerControlsTimer);
-    spotlightPlayer.classList.remove('show-controls');
-  }
+  if (!show) spotlightPlayer.classList.remove('show-controls');
 }
 
 function updateSpotlightMedia(product) {
@@ -134,4 +144,4 @@ function showProduct(i){dialogOpener=document.activeElement;const p=products[i];
 dialog.addEventListener('close',()=>{document.body.classList.remove('modal-open');dialogOpener?.focus({preventScroll:true})});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close()}});
 document.querySelectorAll('[data-product]').forEach(b=>b.addEventListener('click',()=>showProduct(Number(b.dataset.product))));document.getElementById('detail-button').addEventListener('click',()=>showProduct(selected));
 document.getElementById('year').textContent=new Date().getFullYear();
-const sections=document.querySelectorAll('main>section[id],#lower-content>section[id]');const navLinks=document.querySelectorAll('.main-navigation .nav-link');const observer=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id));}}},{rootMargin:'-15% 0px -55% 0px'});sections.forEach(s=>observer.observe(s));
+const sections=document.querySelectorAll('main>section[id],#lower-content>section[id]');const navLinks=document.querySelectorAll('.main-navigation .nav-link');const observer=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id||a.dataset.sectionAlias?.split(' ').includes(e.target.id)));}}},{rootMargin:'-15% 0px -55% 0px'});sections.forEach(s=>observer.observe(s));
