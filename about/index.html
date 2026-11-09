@@ -31,8 +31,8 @@
           </nav>
         </div>
         <figure class="about-hero-photo">
-          <img src="../assets/about/factory-aerial.jpg" alt="工厂厂区航拍" width="1480" height="832" fetchpriority="high">
-          <figcaption>厂区航拍 · 来自桦锐工厂视频</figcaption>
+          <img src="../assets/about/office-building.jpg" alt="广州黄埔办公大楼外景" width="1280" height="1706" fetchpriority="high">
+          <figcaption>广州黄埔 · 办公大楼</figcaption>
         </figure>
       </div>
     </section>
@@ -81,9 +81,29 @@
           </dl>
           <a class="about-text-link" href="../index.html#factory-video">观看工厂视频 <span aria-hidden="true">→</span></a>
         </div>
-        <figure class="about-photo">
-          <img src="../assets/about/workshop.jpg" alt="厂房内的刀具生产设备" width="1480" height="832" loading="lazy">
-          <figcaption>生产车间 · 来自桦锐工厂视频</figcaption>
+        <figure class="about-gallery" aria-label="办公与车间实拍">
+          <div class="about-gallery-frame" id="about-gallery-photos">
+            <img class="is-current" src="../assets/about/office-meeting.jpg" alt="落地窗旁的会议室" width="1680" height="1260" data-caption="办公室 · 会议室">
+            <img class="gallery-portrait" src="../assets/about/office-corridor.jpg" alt="广州办公室的走廊" width="1260" height="1680" data-caption="办公室 · 走廊" aria-hidden="true">
+            <img class="gallery-portrait" src="../assets/about/office-entry.jpg" alt="广州办公室入口" width="1260" height="1680" data-caption="办公室 · 入口" aria-hidden="true">
+            <img class="gallery-grinders" src="../assets/about/workshop-grinders.jpg" alt="生产车间内的一排刀具磨床" width="1680" height="1260" data-caption="生产车间 · 刀具磨床" aria-hidden="true">
+            <img src="../assets/about/workshop-aisle.jpg" alt="生产车间通道两侧的刀具磨床" width="1680" height="1260" data-caption="生产车间 · 设备通道" aria-hidden="true">
+          </div>
+          <figcaption class="about-gallery-footer">
+            <span class="about-gallery-caption">办公室 · 会议室</span>
+            <div class="about-gallery-controls" hidden>
+              <span class="about-gallery-count">1 / 5</span>
+              <button type="button" data-gallery-step="-1" aria-label="上一张照片" aria-controls="about-gallery-photos">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
+              </button>
+              <button type="button" data-gallery-step="1" aria-label="下一张照片" aria-controls="about-gallery-photos">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg>
+              </button>
+              <button type="button" class="about-gallery-toggle" aria-label="暂停自动轮播" aria-controls="about-gallery-photos">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="gallery-pause-icon" d="M9 6v12m6-12v12"/><path class="gallery-play-icon" d="m9 6 9 6-9 6z"/></svg>
+              </button>
+            </div>
+          </figcaption>
         </figure>
       </div>
     </section>
@@ -97,5 +117,6 @@
   </main>
   <footer><a class="footer-brand" href="../index.html#top">HUARUI<span>桦锐精密刀具</span></a><span>© 2026 HUARUI</span><a href="#overview">返回顶部</a></footer>
   <script src="../catalog/site-navigation.js"></script>
+  <script src="gallery.js"></script>
 </body>
 </html>
