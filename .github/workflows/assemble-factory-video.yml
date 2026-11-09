@@ -1,0 +1,23 @@
+name: Assemble factory video
+on:
+  push:
+    branches: [codex/factory-video-assembly]
+    paths: ['.factory-assembly/part-*']
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reassemble the original web video and verify its Git hash
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .factory-assembly/part-* > assets/video/factory-4k.mp4
+          test "$(git hash-object assets/video/factory-4k.mp4)" = '8e964e5086a2eb39c08fb4291cb6ef631f7175f9'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/video/factory-4k.mp4
+          git commit -m 'Assemble the approved factory video'
+          git push origin HEAD:refs/heads/codex/factory-video-assembly
