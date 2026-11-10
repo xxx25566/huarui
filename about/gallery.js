@@ -1,4 +1,5 @@
 (() => {
+  const translate = window.huaruiLocale?.text ?? (value => value);
   const gallery = document.querySelector('.about-gallery');
   const slides = [...gallery.querySelectorAll('.about-gallery-frame img')];
   const caption = gallery.querySelector('.about-gallery-caption');
@@ -38,14 +39,14 @@
       );
     }
 
-    caption.textContent = next.dataset.caption;
+    caption.textContent = translate(next.dataset.caption);
     count.textContent = `${current + 1} / ${slides.length}`;
     schedule();
   }
 
   function updatePlayback() {
     toggle.toggleAttribute('data-paused', !playing);
-    toggle.setAttribute('aria-label', playing ? '暂停自动轮播' : '开始自动轮播');
+    toggle.setAttribute('aria-label', translate(playing ? '暂停自动轮播' : '开始自动轮播'));
     schedule();
   }
 

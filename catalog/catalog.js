@@ -1,6 +1,8 @@
 (function () {
   'use strict';
   const el = id => document.getElementById(id);
+  const translate = window.huaruiLocale?.text ?? ((source, values = {}) =>
+    source.replace(/\{(\w+)\}/g, (token, key) => values[key] ?? token));
   const normalize = value => String(value || '').trim().toLocaleLowerCase();
   const search = el('catalog-search');
   if (search) {
@@ -41,7 +43,7 @@
   for (const [, label] of columns) {
     const th = document.createElement('th');
     th.scope = 'col';
-    th.textContent = label;
+    th.textContent = translate(label);
     headings.append(th);
   }
   el('spec-head').append(headings);
@@ -52,7 +54,7 @@
     el('selected-code').textContent = row.code;
     el('selected-details').textContent = columns.slice(1)
       .filter(([key]) => row[key])
-      .map(([key, label]) => label + ' ' + row[key]).join(' · ');
+      .map(([key, label]) => translate(label) + ' ' + translate(row[key])).join(' · ');
     el('copy-status').textContent = '';
     photo.replaceChildren();
     if (row.image || cover) {
@@ -75,7 +77,7 @@
   function render() {
     const term = normalize(specSearch.value);
     const filtered = rows.filter(row => (!diameter.value || row.diameter === diameter.value) &&
-      columns.some(([key]) => normalize(row[key]).includes(term)));
+      columns.some(([key]) => normalize(row[key]).includes(term) || (row[key] && normalize(translate(row[key])).includes(term))));
     const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
     page = Math.min(page, pages - 1);
     const body = el('spec-body');
@@ -92,12 +94,14 @@
           button.setAttribute('aria-pressed', String(selected === row));
           button.addEventListener('click', () => choose(row, true));
           td.append(button);
-        } else td.textContent = row[key] || '—';
+        } else td.textContent = row[key] ? translate(row[key]) : '—';
         tr.append(td);
       }
       body.append(tr);
     }
-    el('result-count').textContent = filtered.length ? '找到 ' + filtered.length + ' 种规格' : '没有匹配的规格。';
+    el('result-count').textContent = filtered.length
+      ? translate('找到 {count} 种规格', { count: filtered.length })
+      : translate('没有匹配的规格。');
     el('pager').hidden = pages < 2;
     el('page-label').textContent = (page + 1) + ' / ' + pages;
     el('prev').disabled = page === 0;
@@ -113,9 +117,9 @@
     try {
       if (!navigator.clipboard) throw new Error('clipboard unavailable');
       await navigator.clipboard.writeText(value);
-      el('copy-status').textContent = '已复制';
+      el('copy-status').textContent = translate('已复制');
     } catch {
-      window.prompt('请复制以下询价规格', value);
+      window.prompt(translate('请复制以下询价规格'), value);
     }
   });
   const initial = new URLSearchParams(location.hash.slice(1)).get('sku');

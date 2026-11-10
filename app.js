@@ -6,13 +6,18 @@ const products=[
 {name:'玉米铣刀',en:'CORN END MILL',image:'33.png',kind:'密集多齿',shape:'交错齿形',purpose:'多齿铣削与轮廓加工',description:'细密交错的齿形，形成鲜明的切削表面。针对具体工件材料与加工方式，进一步确认适配规格。',points:['交错密集齿形','柱状切削部位','直柄装夹设计'],group:'milling'}
 ];
 let selected=0;
+const siteLocale = window.huaruiLocale;
+const localizeUi = siteLocale?.localize ?? (value => value);
 const collection=document.getElementById('collection');
 collection.innerHTML=`<div class="collection-toolbar"><div class="filters" role="group" aria-label="按加工类型筛选"><button class="filter active" data-filter="all" aria-pressed="true">全部系列</button><button class="filter" data-filter="milling" aria-pressed="false">铣削加工</button><button class="filter" data-filter="shaping" aria-pressed="false">成型加工</button><button class="filter" data-filter="finishing" aria-pressed="false">倒角修边</button></div></div><div class="product-grid">${products.map((p,i)=>`<button id="product-card-${i}" class="product-card" data-product="${i}" data-group="${p.group}" aria-label="查看${p.name}详情"><div class="card-photo"><img src="assets/${p.image}" alt="${p.name}" loading="lazy"></div><div class="card-bottom"><h3>${p.name}</h3><span class="card-open" aria-hidden="true">+</span></div></button>`).join('')}</div>`;
-document.getElementById('lower-content').innerHTML=`<section class="precision-section" id="precision"><div class="precision-top"><h2>刀具细节</h2></div><div class="spotlight"><div class="spotlight-image"><div class="spec-line spec-left"></div><img id="spotlight-photo" src="assets/44.png" alt="4刃钨钢铣刀"><div class="spec-line spec-right"></div>
+const lowerContent = document.getElementById('lower-content');
+lowerContent.innerHTML=`<section class="precision-section" id="precision"><div class="precision-top"><h2>刀具细节</h2></div><div class="spotlight"><div class="spotlight-image"><div class="spec-line spec-left"></div><img id="spotlight-photo" src="assets/44.png" alt="4刃钨钢铣刀"><div class="spec-line spec-right"></div>
 <div class="video-player spotlight-player" role="group" aria-label="刀具视频" hidden>
   <video class="spotlight-video" playsinline preload="metadata" disablepictureinpicture></video>
 </div></div><div class="spotlight-copy"><div class="spotlight-tabs" role="group" aria-label="选择刀具">${products.map((p,i)=>`<button data-select="${i}" class="${i===0?'active':''}" aria-pressed="${i===0}" aria-label="查看${p.name}">${p.name.replace(/^[0-9]+刃/, '')}</button>`).join('')}</div><div id="spotlight-details" aria-live="polite"></div><button class="button light" id="detail-button">查看刀具详情 <span class="tiny-cross">+</span></button></div></div></section>
 <section id="selection"></section>`;
+siteLocale?.localizeTree(collection);
+siteLocale?.localizeTree(lowerContent);
 // Unless a different cover is requested, use the first frame of the source clip.
 const spotlightPanel = document.querySelector('.spotlight-image');
 const spotlightPhoto = document.getElementById('spotlight-photo');
@@ -33,6 +38,7 @@ function setupVideoPlayer(player) {
     <input class="player-seek" type="range" min="0" max="1000" value="0" aria-label="播放进度" disabled>
   </div>
   `);
+  siteLocale?.localizeTree(player);
   const playerSurface = player.querySelector('.player-surface');
   const playerToggle = player.querySelector('.player-toggle');
   const playerMute = player.querySelector('.player-mute');
@@ -42,7 +48,7 @@ function setupVideoPlayer(player) {
 
   function updatePlayerControls() {
     const playing = !video.paused && !video.ended;
-    const playLabel = playing ? '暂停视频' : '播放视频';
+    const playLabel = localizeUi(playing ? '暂停视频' : '播放视频');
     const muted = video.muted;
     const duration = video.duration;
     const canSeek = Number.isFinite(duration) && duration > 0;
@@ -51,7 +57,7 @@ function setupVideoPlayer(player) {
     player.classList.toggle('is-muted', muted);
     playerSurface.setAttribute('aria-label', playLabel);
     playerToggle.setAttribute('aria-label', playLabel);
-    playerMute.setAttribute('aria-label', muted ? '取消静音' : '静音');
+    playerMute.setAttribute('aria-label', localizeUi(muted ? '取消静音' : '静音'));
     playerSeek.disabled = !canSeek;
     playerSeek.value = Math.round(progress * 1000);
     playerSeek.style.setProperty('--progress', `${progress * 100}%`);
@@ -84,7 +90,7 @@ function setupVideoPlayer(player) {
   });
   document.addEventListener('fullscreenchange', () => {
     const label = document.fullscreenElement === player ? '退出全屏' : '全屏';
-    playerFullscreen.setAttribute('aria-label', label);
+    playerFullscreen.setAttribute('aria-label', localizeUi(label));
   });
 
   player.addEventListener('pointerdown', event => {
@@ -116,13 +122,13 @@ function showSpotlightVideo(show) {
 
 function updateSpotlightMedia(product) {
   spotlightPhoto.src = 'assets/' + product.image;
-  spotlightPhoto.alt = product.name;
+  spotlightPhoto.alt = localizeUi(product.name);
   const media = product.video;
   if (media && spotlightVideo.getAttribute('src') !== media.src) {
     spotlightVideo.pause();
     spotlightVideo.poster = media.poster;
     spotlightVideo.src = media.src;
-    spotlightPlayer.setAttribute('aria-label', product.name + '视频');
+    spotlightPlayer.setAttribute('aria-label', localizeUi(product.name + '视频'));
     spotlightVideo.load();
   }
   if (!media && spotlightVideo.hasAttribute('src')) {
@@ -135,12 +141,12 @@ function updateSpotlightMedia(product) {
 }
 spotlightVideo.addEventListener('error', () => showSpotlightVideo(false));
 
-function updateSpotlight(i){selected=i;const p=products[i];updateSpotlightMedia(p);document.getElementById('spotlight-details').innerHTML=`<h3>${p.name}</h3><p>${p.description}</p><dl><div><dt>刀刃结构</dt><dd>${p.kind}</dd></div><div><dt>刀头形态</dt><dd>${p.shape}</dd></div><div><dt>选型方向</dt><dd>${p.purpose}</dd></div></dl>`;document.querySelectorAll('[data-select]').forEach(b=>{const active=Number(b.dataset.select)===i;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active)})}
+function updateSpotlight(i){selected=i;const p=products[i];updateSpotlightMedia(p);const details=document.getElementById('spotlight-details');details.innerHTML=`<h3>${p.name}</h3><p>${p.description}</p><dl><div><dt>刀刃结构</dt><dd>${p.kind}</dd></div><div><dt>刀头形态</dt><dd>${p.shape}</dd></div><div><dt>选型方向</dt><dd>${p.purpose}</dd></div></dl>`;siteLocale?.localizeTree(details);document.querySelectorAll('[data-select]').forEach(b=>{const active=Number(b.dataset.select)===i;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active)})}
 updateSpotlight(0);
 document.querySelectorAll('[data-select]').forEach(b=>b.addEventListener('click',()=>updateSpotlight(Number(b.dataset.select))));
 document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(f=>{f.classList.toggle('active',f===b);f.setAttribute('aria-pressed',f===b)});document.querySelectorAll('.product-card').forEach(card=>{const show=b.dataset.filter==='all'||card.dataset.group===b.dataset.filter;card.hidden=!show})}));
 const dialog=document.getElementById('product-dialog');let dialogOpener;
-function showProduct(i){dialogOpener=document.activeElement;const p=products[i];dialog.innerHTML=`<button class="dialog-close" aria-label="关闭详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg></button><div class="dialog-photo"><img src="assets/${p.image}" alt="${p.name}实拍细节"><button class="dialog-zoom" aria-pressed="false">放大刀头</button></div><div class="dialog-copy"><h2 id="dialog-title">${p.name}</h2><small>${p.en}</small><p>${p.description}</p><ul>${p.points.map(v=>`<li>${v}</li>`).join('')}</ul><div class="dialog-note">选型前请确认工件材料、刀具尺寸与设备条件。刀具实际规格以产品资料为准。</div><button class="button primary dialog-explore">查看选型指南</button></div>`;dialog.showModal();document.body.classList.add('modal-open');dialog.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());dialog.querySelector('.dialog-zoom').addEventListener('click',function(){const zoom=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',zoom);this.textContent=zoom?'查看完整刀具':'放大刀头';dialog.querySelector('.dialog-photo').classList.toggle('zoomed',zoom)});dialog.querySelector('.dialog-explore').addEventListener('click',()=>{dialog.close();document.getElementById('selection').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})})}
+function showProduct(i){dialogOpener=document.activeElement;const p=products[i];dialog.innerHTML=`<button class="dialog-close" aria-label="关闭详情"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg></button><div class="dialog-photo"><img src="assets/${p.image}" alt="${p.name}实拍细节"><button class="dialog-zoom" aria-pressed="false">放大刀头</button></div><div class="dialog-copy"><h2 id="dialog-title">${p.name}</h2><small>${p.en}</small><p>${p.description}</p><ul>${p.points.map(v=>`<li>${v}</li>`).join('')}</ul><div class="dialog-note">选型前请确认工件材料、刀具尺寸与设备条件。刀具实际规格以产品资料为准。</div><button class="button primary dialog-explore">查看选型指南</button></div>`;siteLocale?.localizeTree(dialog);dialog.showModal();document.body.classList.add('modal-open');dialog.querySelector('.dialog-close').addEventListener('click',()=>dialog.close());dialog.querySelector('.dialog-zoom').addEventListener('click',function(){const zoom=this.getAttribute('aria-pressed')!=='true';this.setAttribute('aria-pressed',zoom);this.textContent=localizeUi(zoom?'查看完整刀具':'放大刀头');dialog.querySelector('.dialog-photo').classList.toggle('zoomed',zoom)});dialog.querySelector('.dialog-explore').addEventListener('click',()=>{dialog.close();document.getElementById('selection').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})})}
 dialog.addEventListener('close',()=>{document.body.classList.remove('modal-open');dialogOpener?.focus({preventScroll:true})});dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close()}});
 document.querySelectorAll('[data-product]').forEach(b=>b.addEventListener('click',()=>showProduct(Number(b.dataset.product))));document.getElementById('detail-button').addEventListener('click',()=>showProduct(selected));
 document.getElementById('year').textContent=new Date().getFullYear();

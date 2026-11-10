@@ -1,0 +1,95 @@
+.language-picker {
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  letter-spacing: normal;
+}
+.language-picker summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 8px;
+  list-style: none;
+  color: #334d67;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.language-picker summary::-webkit-details-marker { display: none; }
+.language-picker summary::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-inline-start: 3px;
+  border: solid currentColor;
+  border-width: 0 1px 1px 0;
+  transform: translateY(-2px) rotate(45deg);
+}
+.language-picker[open] summary::after { transform: translateY(1px) rotate(225deg); }
+.language-picker summary:focus-visible { outline: 2px solid #458ddd; outline-offset: 3px; border-radius: 6px; }
+.language-flag {
+  display: block;
+  width: 20px;
+  height: 14px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px #18395524;
+}
+.language-options {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + 6px);
+  min-width: 174px;
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  border: 1px solid #dce6ef;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 30px #163a601a;
+}
+.language-options a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  color: #334d67;
+  white-space: nowrap;
+}
+.language-options a:hover, .language-options a:focus-visible, .language-options a[aria-current] {
+  color: #0759ad;
+  background: #edf5fd;
+}
+.language-options a[aria-current]::after {
+  content: "✓";
+  margin-inline-start: auto;
+  font-size: 12px;
+}
+html:not(:lang(zh)) .hero-copy h1 {
+  font-size: clamp(43px, 5.1vw, 86px);
+  letter-spacing: -.045em;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+}
+html:lang(ja) .hero-copy h1 { letter-spacing: .015em; }
+html:not(:lang(zh)) .hero-actions,
+html:not(:lang(zh)) .spotlight-tabs { flex-wrap: wrap; }
+html:not(:lang(zh)) .spotlight-tabs button { width: auto; white-space: normal; }
+html:not(:lang(zh)) .hero-copy > p { max-width: 32ch; }
+html:not(:lang(zh)) .company-copy h2,
+html:not(:lang(zh)) .about-intro h1 { letter-spacing: -.015em; }
+html:not(:lang(zh)) .company-stat { padding-inline: clamp(8px, 1.8vw, 28px); }
+html:not(:lang(zh)) .company-stat:first-child { padding-inline-start: 0; }
+html:not(:lang(zh)) .company-stat dt { line-height: 1.35; }
+html:not(:lang(zh)) .catalog-entry { white-space: normal; }
+@media (max-width: 850px) {
+  html:not(:lang(zh)) .company-stat:nth-child(3) { padding-inline-start: 0; }
+}
+@media (min-width: 701px) and (max-width: 1050px) {
+  html:not(:lang(zh)) .header-inner { gap: 12px; }
+  html:not(:lang(zh)) .header .main-navigation { gap: 5px; }
+  html:not(:lang(zh)) .header .main-navigation .nav-link { padding-inline: 5px; }
+}

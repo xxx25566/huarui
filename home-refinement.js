@@ -6,11 +6,11 @@
   let captionAnimation, glowFrame = 0, glowPointer;
 
   function sync() {
-    name.textContent = products[heroSelected].name;
+    name.textContent = localizeUi(products[heroSelected].name);
     heroTools.forEach(tool => {
       const product = products[+tool.dataset.index];
       const main = tool.dataset.slot === 'center';
-      tool.setAttribute('aria-label', main ? '查看' + product.name + '详情' : '切换到' + product.name);
+      tool.setAttribute('aria-label', localizeUi(main ? '查看' + product.name + '详情' : '切换到' + product.name));
     });
   }
   sync();
