@@ -2,6 +2,7 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body.catalog-page { margin: 0; padding-top: 86px; color: #14314c; background: #f4f8fc; }
+body.catalog-page:has(.catalog-tool) { min-height: 100vh; background: #fff; }
 a { color: inherit; text-decoration: none; }
 button, input, select { font: inherit; }
 button, a, select { cursor: pointer; }
@@ -18,37 +19,57 @@ input, select { min-height: 44px; padding: 8px 13px; border: 1px solid #ccdbe8; 
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 18px; }
 .catalog-card { border: 1px solid #deebf5; border-radius: 19px; overflow: hidden; background: white; transition: box-shadow .2s, border-color .2s; }
 .catalog-card:hover { border-color: #a7c9e7; box-shadow: 0 12px 30px #194a7a14; }
-.card-image, .detail-photo { display: grid; place-items: center; background: radial-gradient(at 45% 30%, #fff, #e9f1f9); min-width: 0; }
-.card-image { height: 200px; padding: 18px; }
+.card-image, .detail-photo { display: grid; place-items: center; min-width: 0; }
+.card-image { height: 200px; padding: 18px; background: radial-gradient(at 45% 30%, #fff, #e9f1f9); }
 .card-image img, .detail-photo img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
 .no-photo { font-size: clamp(20px, 4vw, 48px); font-weight: 700; letter-spacing: .12em; color: #6e8ca8; }
 .card-copy { padding: 18px 22px 23px; }
 .card-copy h2 { font-size: 21px; margin: 0; overflow-wrap: anywhere; }
 .card-copy p, .muted { color: #546e85; }
 .card-copy span, .back { color: #075ba9; font-size: 14px; }
-.back { display: inline-block; margin-bottom: 23px; }
-.product-top { display: grid; grid-template-columns: minmax(260px, .9fr) minmax(0, 1.1fr); gap: 44px; align-items: center; background: white; border-radius: 24px; border: 1px solid #deebf5; padding: 24px; }
-.detail-photo { height: 365px; padding: 24px; border-radius: 17px; }
-.product-top section { padding: 8px 12px; }
-.badge { display: inline-block; background: #eaf3fc; color: #18598d; border-radius: 20px; padding: 6px 11px; font-size: 13px; }
-#selected { border-top: 1px solid #deebf5; padding-top: 16px; overflow-wrap: anywhere; }
-#selected-details { color: #526a81; line-height: 1.6; }
+.back { display: inline-block; margin-bottom: 18px; }
+.back:hover { text-decoration: underline; text-underline-offset: 4px; }
+.product-top {
+  display: grid;
+  grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(30px, 5vw, 74px);
+  padding: 12px 0 37px;
+}
+.detail-photo { height: clamp(290px, 27vw, 370px); padding: 13px 20px; }
+.catalog-page .product-top h1 { margin: 0 0 15px; font-size: clamp(32px, 3.5vw, 52px); font-weight: 600; }
+.product-top .intro:empty { display: none; }
+.badge { margin: 0 0 18px; color: #526a81; font-size: 14px; }
+#selected { border-top: 1px solid #e5ebf1; padding-top: 16px; overflow-wrap: anywhere; }
+#selected-code { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; }
+#selected-details { margin: 9px 0 15px; color: #526a81; line-height: 1.7; }
 button { border: 1px solid #cdddea; border-radius: 9px; background: white; color: #075ba9; padding: 8px 12px; }
 button:hover { background: #edf6ff; }
-#copy-spec { background: #095ba8; color: white; border-color: #095ba8; }
+#copy-spec { background: #095ba8; color: white; border-color: #095ba8; border-radius: 6px; }
+#copy-spec:hover { background: #064e92; }
 #copy-status { padding-left: 10px; color: #376653; }
-.specs { margin-top: 24px; border-radius: 24px; background: white; padding: 28px; border: 1px solid #deebf5; }
-.specs h2 { margin-top: 0; }
+.specs { padding-top: 28px; border-top: 1px solid #dde6ee; }
+.specs h2 { margin: 0 0 19px; font-size: 25px; font-weight: 650; }
+.specs input, .specs select { border-radius: 6px; }
 .catalog-controls { display: flex; gap: 14px; flex-wrap: wrap; }
 .catalog-controls label:first-child { flex: 0 1 370px; }
 .table-scroll { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; text-align: left; }
 th, td { padding: 12px; border-bottom: 1px solid #e4edf5; font-size: 14px; min-width: 76px; }
-th { background: #edf4fb; white-space: nowrap; }
-.spec-button { text-align: left; overflow-wrap: anywhere; }
-.spec-button[aria-pressed="true"] { color: white; background: #095ba8; border-color: #095ba8; }
-.pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 22px; }
-.pager button:disabled { color: #8b9cab; cursor: default; }
+th { background: #f4f7fa; white-space: nowrap; }
+.spec-button {
+  padding: 5px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  overflow-wrap: anywhere;
+  text-underline-offset: 4px;
+}
+.spec-button:hover, .spec-button[aria-pressed="true"] { background: transparent; text-decoration: underline; }
+.spec-button[aria-pressed="true"] { color: #064e92; font-weight: 650; }
+.spec-expansion { display: flex; justify-content: center; margin-top: 22px; }
+.spec-expansion button { min-height: 42px; padding: 8px 19px; border: 0; border-radius: 6px; font-weight: 550; }
 footer { padding: 26px 5vw; border-top: 1px solid #dce7f1; color: #546e85; font-size: 12px; letter-spacing: .09em; }
 
 body.catalog-listing-page { background: #f5f7fa; }
@@ -190,16 +211,15 @@ body.catalog-listing-page { background: #f5f7fa; }
 .catalog-tool-facts div { display: grid; grid-template-columns: minmax(100px, 1fr) 1.6fr; gap: 12px; padding: 12px 0; border-top: 1px solid #e3edf5; }
 .catalog-tool-facts dt { color: #526a81; }
 .catalog-tool-facts dd { margin: 0; font-weight: 600; }
-.catalog-tool .detail-photo { background: #fff; }
 @media (max-width: 980px) {
   .directory-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
   body.catalog-page { padding-top: 70px; }
   main { padding-top: 25px; }
-  .product-top { grid-template-columns: 1fr; gap: 12px; padding: 15px; }
+  .product-top { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 8px 0 28px; }
   .detail-photo { height: 260px; }
-  .specs { padding: 17px; }
+  .specs { padding-top: 21px; }
   .catalog-directory { padding: 16px 0 45px; }
   .catalog-hero {
     min-height: 188px;
