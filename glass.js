@@ -29,8 +29,20 @@ const heroTrack=document.getElementById('hero-carousel-track');
 const heroTools=[...heroTrack.querySelectorAll('.carousel-tool')];
 const heroStatus=heroVisual.querySelector('.hero-carousel-status');
 const wrapHero=index=>(index+products.length)%products.length;
-// Load the other product photos before they are first brought into view.
-const heroPhotos=products.map(product=>{const image=new Image();image.src='assets/'+product.image;return image;});
+// Warm the remaining carousel images after the first screen has loaded.
+window.addEventListener('load', () => {
+  const prefetch = () => {
+    const shown = new Set(heroTools.map(tool => Number(tool.dataset.index)));
+    products.forEach((product, index) => {
+      if (shown.has(index)) return;
+      const image = new Image();
+      image.fetchPriority = 'low';
+      image.src = 'assets/' + product.image;
+    });
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(prefetch);
+  else setTimeout(prefetch, 1000);
+}, { once: true });
 
 function changeHero(index){
   if(index===heroSelected)return;
@@ -50,7 +62,7 @@ function changeHero(index){
     const old=previous.get(target),tool=old?.tool||available.shift(),slot=slots[i];
     if(!old){
       const image=tool.querySelector('img');
-      image.src=heroPhotos[target].src;
+      image.src='assets/'+products[target].image;
       image.alt=localizeUi(products[target].name+'实拍');
       tool.dataset.index=target;
     }

@@ -1,19 +1,19 @@
 const products=[
-{name:'4刃钨钢铣刀',en:'4-FLUTE END MILL',image:'44.png',video:{src:'assets/video/4flute.mp4',poster:'assets/video/4flute-poster.png'},kind:'四刃结构',shape:'平底刃型',purpose:'平面、侧壁与轮廓铣削',description:'四刃螺旋，勾勒利落轮廓。平底刃型与连续螺旋刃线，服务于平面和侧壁的加工需求。',points:['四刃螺旋结构','平底端刃形态','直柄装夹设计'],group:'milling'},
-{name:'3刃锥度铣刀',en:'3-FLUTE TAPERED END MILL',image:'55.png',kind:'三刃结构',shape:'锥度刃型',purpose:'斜面与锥度轮廓加工',description:'以渐变的刀身，回应有角度的轮廓。三刃锥度形态，为带斜度的加工区域提供选型方向。',points:['三刃螺旋结构','锥度刀头形态','直柄装夹设计'],group:'shaping'},
-{name:'2刃锥度球刀',en:'2-FLUTE TAPERED BALL NOSE',image:'11.png',kind:'双刃结构',shape:'锥度球头',purpose:'曲面细修与立体轮廓加工',description:'让曲面的过渡，更从容。球头与锥度刀身相接，适用于需要关注曲面细节的选型场景。',points:['双刃螺旋结构','圆弧球头形态','锥度刀身设计'],group:'shaping'},
-{name:'2刃倒角刀',en:'2-FLUTE CHAMFER MILL',image:'22.png',kind:'双刃结构',shape:'尖端倒角',purpose:'孔口、边缘倒角与修边',description:'收好每一道边缘。尖端刃型清晰呈现，为孔口和工件边缘的倒角工序提供选择。',points:['双刃结构','尖端倒角形态','直柄装夹设计'],group:'finishing'},
-{name:'玉米铣刀',en:'CORN END MILL',image:'33.png',kind:'密集多齿',shape:'交错齿形',purpose:'多齿铣削与轮廓加工',description:'细密交错的齿形，形成鲜明的切削表面。针对具体工件材料与加工方式，进一步确认适配规格。',points:['交错密集齿形','柱状切削部位','直柄装夹设计'],group:'milling'}
+{name:'4刃钨钢铣刀',en:'4-FLUTE END MILL',image:'44.webp',video:{src:'assets/video/4flute.mp4',poster:'assets/video/4flute-poster.webp'},kind:'四刃结构',shape:'平底刃型',purpose:'平面、侧壁与轮廓铣削',description:'四刃螺旋，勾勒利落轮廓。平底刃型与连续螺旋刃线，服务于平面和侧壁的加工需求。',points:['四刃螺旋结构','平底端刃形态','直柄装夹设计'],group:'milling'},
+{name:'3刃锥度铣刀',en:'3-FLUTE TAPERED END MILL',image:'55.webp',kind:'三刃结构',shape:'锥度刃型',purpose:'斜面与锥度轮廓加工',description:'以渐变的刀身，回应有角度的轮廓。三刃锥度形态，为带斜度的加工区域提供选型方向。',points:['三刃螺旋结构','锥度刀头形态','直柄装夹设计'],group:'shaping'},
+{name:'2刃锥度球刀',en:'2-FLUTE TAPERED BALL NOSE',image:'11.webp',kind:'双刃结构',shape:'锥度球头',purpose:'曲面细修与立体轮廓加工',description:'让曲面的过渡，更从容。球头与锥度刀身相接，适用于需要关注曲面细节的选型场景。',points:['双刃螺旋结构','圆弧球头形态','锥度刀身设计'],group:'shaping'},
+{name:'2刃倒角刀',en:'2-FLUTE CHAMFER MILL',image:'22.webp',kind:'双刃结构',shape:'尖端倒角',purpose:'孔口、边缘倒角与修边',description:'收好每一道边缘。尖端刃型清晰呈现，为孔口和工件边缘的倒角工序提供选择。',points:['双刃结构','尖端倒角形态','直柄装夹设计'],group:'finishing'},
+{name:'玉米铣刀',en:'CORN END MILL',image:'33.webp',kind:'密集多齿',shape:'交错齿形',purpose:'多齿铣削与轮廓加工',description:'细密交错的齿形，形成鲜明的切削表面。针对具体工件材料与加工方式，进一步确认适配规格。',points:['交错密集齿形','柱状切削部位','直柄装夹设计'],group:'milling'}
 ];
 let selected=0;
 const siteLocale = window.huaruiLocale;
 const localizeUi = siteLocale?.localize ?? (value => value);
 const collection=document.getElementById('collection');
-collection.innerHTML=`<div class="collection-toolbar"><div class="filters" role="group" aria-label="按加工类型筛选"><button class="filter active" data-filter="all" aria-pressed="true">全部系列</button><button class="filter" data-filter="milling" aria-pressed="false">铣削加工</button><button class="filter" data-filter="shaping" aria-pressed="false">成型加工</button><button class="filter" data-filter="finishing" aria-pressed="false">倒角修边</button></div></div><div class="product-grid">${products.map((p,i)=>`<button id="product-card-${i}" class="product-card" data-product="${i}" data-group="${p.group}" aria-label="查看${p.name}详情"><div class="card-photo"><img src="assets/${p.image}" alt="${p.name}" loading="lazy"></div><div class="card-bottom"><h3>${p.name}</h3><span class="card-open" aria-hidden="true">+</span></div></button>`).join('')}</div>`;
+collection.innerHTML=`<div class="collection-toolbar"><div class="filters" role="group" aria-label="按加工类型筛选"><button class="filter active" data-filter="all" aria-pressed="true">全部系列</button><button class="filter" data-filter="milling" aria-pressed="false">铣削加工</button><button class="filter" data-filter="shaping" aria-pressed="false">成型加工</button><button class="filter" data-filter="finishing" aria-pressed="false">倒角修边</button></div></div><div class="product-grid">${products.map((p,i)=>`<button id="product-card-${i}" class="product-card" data-product="${i}" data-group="${p.group}" aria-label="查看${p.name}详情"><div class="card-photo"><img src="assets/${p.image}" alt="${p.name}" loading="lazy" decoding="async"></div><div class="card-bottom"><h3>${p.name}</h3><span class="card-open" aria-hidden="true">+</span></div></button>`).join('')}</div>`;
 const lowerContent = document.getElementById('lower-content');
-lowerContent.innerHTML=`<section class="precision-section" id="precision"><div class="precision-top"><h2>刀具细节</h2></div><div class="spotlight"><div class="spotlight-image"><div class="spec-line spec-left"></div><img id="spotlight-photo" src="assets/44.png" alt="4刃钨钢铣刀"><div class="spec-line spec-right"></div>
+lowerContent.innerHTML=`<section class="precision-section" id="precision"><div class="precision-top"><h2>刀具细节</h2></div><div class="spotlight"><div class="spotlight-image"><div class="spec-line spec-left"></div><img id="spotlight-photo" src="assets/44.webp" alt="4刃钨钢铣刀" loading="lazy" decoding="async"><div class="spec-line spec-right"></div>
 <div class="video-player spotlight-player" role="group" aria-label="刀具视频" hidden>
-  <video class="spotlight-video" playsinline preload="metadata" disablepictureinpicture></video>
+  <video class="spotlight-video" playsinline preload="none" disablepictureinpicture></video>
 </div></div><div class="spotlight-copy"><div class="spotlight-tabs" role="group" aria-label="选择刀具">${products.map((p,i)=>`<button data-select="${i}" class="${i===0?'active':''}" aria-pressed="${i===0}" aria-label="查看${p.name}">${p.name.replace(/^[0-9]+刃/, '')}</button>`).join('')}</div><div id="spotlight-details" aria-live="polite"></div><button class="button light" id="detail-button">查看刀具详情 <span class="tiny-cross">+</span></button></div></div></section>
 <section id="selection"></section>`;
 siteLocale?.localizeTree(collection);
@@ -65,6 +65,7 @@ function setupVideoPlayer(player) {
 
   function togglePlayerPlayback() {
     if (video.paused || video.ended) {
+      if (!video.hasAttribute('src') && video.dataset.src) video.src = video.dataset.src;
       video.play().catch(() => updatePlayerControls());
     } else {
       video.pause();
@@ -120,22 +121,37 @@ function showSpotlightVideo(show) {
   if (!show) spotlightPlayer.classList.remove('show-controls');
 }
 
+let spotlightNearby = !('IntersectionObserver' in window);
+if (!spotlightNearby) {
+  const spotlightObserver = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    spotlightNearby = true;
+    if (spotlightVideo.dataset.poster) spotlightVideo.poster = spotlightVideo.dataset.poster;
+    spotlightObserver.disconnect();
+  }, { rootMargin: '240px 0px' });
+  spotlightObserver.observe(spotlightPanel);
+}
+
 function updateSpotlightMedia(product) {
   spotlightPhoto.src = 'assets/' + product.image;
   spotlightPhoto.alt = localizeUi(product.name);
   const media = product.video;
-  if (media && spotlightVideo.getAttribute('src') !== media.src) {
+  if (media && spotlightVideo.dataset.src !== media.src) {
     spotlightVideo.pause();
-    spotlightVideo.poster = media.poster;
-    spotlightVideo.src = media.src;
+    spotlightVideo.dataset.src = media.src;
+    spotlightVideo.dataset.poster = media.poster;
+    if (spotlightNearby) spotlightVideo.poster = media.poster;
     spotlightPlayer.setAttribute('aria-label', localizeUi(product.name + '视频'));
-    spotlightVideo.load();
   }
-  if (!media && spotlightVideo.hasAttribute('src')) {
+  if (!media && spotlightVideo.dataset.src) {
     spotlightVideo.pause();
-    spotlightVideo.removeAttribute('src');
+    if (spotlightVideo.hasAttribute('src')) {
+      spotlightVideo.removeAttribute('src');
+      spotlightVideo.load();
+    }
     spotlightVideo.removeAttribute('poster');
-    spotlightVideo.load();
+    delete spotlightVideo.dataset.src;
+    delete spotlightVideo.dataset.poster;
   }
   showSpotlightVideo(Boolean(media) && !spotlightVideo.error);
 }

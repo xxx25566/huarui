@@ -108,17 +108,16 @@
       .filter(([key]) => row[key])
       .map(([key, label]) => translate(label) + ' ' + translate(row[key])).join(' · ');
     el('copy-status').textContent = '';
-    photo.replaceChildren();
-    if (row.image || cover) {
-      const image = document.createElement('img');
-      image.src = row.image || cover;
+    const source = row.image || cover;
+    if (source) {
+      let image = photo.querySelector('img');
+      if (!image) {
+        image = document.createElement('img');
+        image.decoding = 'async';
+        photo.replaceChildren(image);
+      }
+      if (image.getAttribute('src') !== source) image.src = source;
       image.alt = el('product-name').textContent + ' ' + row.code;
-      photo.append(image);
-    } else {
-      const placeholder = document.createElement('span');
-      placeholder.className = 'no-photo';
-      placeholder.textContent = 'HUARUI';
-      photo.append(placeholder);
     }
     if (updateLink) history.replaceState(null, '', '#sku=' + encodeURIComponent(row.code));
     for (const button of el('spec-body').querySelectorAll('button')) {

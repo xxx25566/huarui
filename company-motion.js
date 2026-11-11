@@ -8,7 +8,10 @@
   cover.addEventListener('click', () => {
     dialog.showModal();
     document.body.classList.add('modal-open');
-    if (!video.hasAttribute('src')) video.src = video.dataset.src;
+    if (!video.hasAttribute('src')) {
+      video.poster = video.dataset.poster;
+      video.src = video.dataset.src;
+    }
     video.play().catch(() => {});
   });
   close.addEventListener('click', () => dialog.close());

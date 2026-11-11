@@ -8,6 +8,8 @@
   const toggle = gallery.querySelector('.about-gallery-toggle');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let current = 0;
+  let requested = 0;
+  let change = 0;
   let playing = !motion.matches;
   let visible = !('IntersectionObserver' in window);
   let hovered = false;
@@ -22,10 +24,25 @@
     }
   }
 
-  function show(step) {
+  async function show(step) {
+    clearTimeout(timer);
+    const request = ++change;
+    requested = (requested + step + slides.length) % slides.length;
+    const nextIndex = requested;
+    const next = slides[nextIndex];
+    if (next.dataset.src && !next.hasAttribute('src')) next.src = next.dataset.src;
+    try {
+      await next.decode();
+    } catch {
+      if (request === change) {
+        requested = current;
+        schedule();
+      }
+      return;
+    }
+    if (request !== change) return;
     const previous = slides[current];
-    current = (current + step + slides.length) % slides.length;
-    const next = slides[current];
+    current = nextIndex;
 
     slideAnimation?.cancel();
     previous.classList.remove('is-current');
@@ -41,6 +58,8 @@
 
     caption.textContent = translate(next.dataset.caption);
     count.textContent = `${current + 1} / ${slides.length}`;
+    const nextSlide = slides[(current + 1) % slides.length];
+    if (nextSlide.dataset.src && !nextSlide.hasAttribute('src')) nextSlide.src = nextSlide.dataset.src;
     schedule();
   }
 
@@ -87,6 +106,7 @@
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting && entry.intersectionRatio >= .35;
+      if (visible && !slides[1].hasAttribute('src')) slides[1].src = slides[1].dataset.src;
       schedule();
     }, { threshold: .35 }).observe(gallery);
   }
